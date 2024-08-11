@@ -54,7 +54,7 @@ contract ERC20 is IERC20, IERC20Permit{
 	function balanceOf(address account) public view virtual returns (uint256) {
 		return _balances[account];
 	}
-    function transfer(address to, uint256 value) public virtual returns (bool) {
+	function transfer(address to, uint256 value) public virtual returns (bool) {
 		address owner = msg.sender;
 		_transfer(owner, to, value);
 		return true;
@@ -68,75 +68,75 @@ contract ERC20 is IERC20, IERC20Permit{
 		}
 		_update(from, to, value);
 	}
-    function _update(address from, address to, uint256 value) pauseChk internal virtual {
-        if (from == address(0)) {
-            _totalSupply += value;
-        } else {
-            uint256 fromBalance = _balances[from];
-            if (fromBalance < value) {
-                revert("balance revert");
-            }
-            unchecked {
-                _balances[from] = fromBalance - value;
-            }
-        }
-        if (to == address(0)) {
-            unchecked {
-                _totalSupply -= value;
-            }
-        } else {
-            unchecked {
-                _balances[to] += value;
-            }
-        }
-        emit Transfer(from, to, value);
-    }
-    function allowance(address owner, address spender) public view virtual returns (uint256) {
-        return _allowances[owner][spender];
-    }
-    function approve(address spender, uint256 value) public virtual returns (bool) {
-        address owner = msg.sender;
-        _approve(owner, spender, value);
-        return true;
-    }
-    function _approve(address owner, address spender, uint256 value) internal {
-        _approve(owner, spender, value, true);
-    }
-    function _approve(address owner, address spender, uint256 value, bool emitEvent) internal virtual {
-        if (owner == address(0)) {
-            revert("address(0)");
-        }
-        if (spender == address(0)) {
-            revert("address(0)");
-        }
-        _allowances[owner][spender] = value;
-        if (emitEvent) {
-            emit Approval(owner, spender, value);
-        }
-    }
-    function _spendAllowance(address owner, address spender, uint256 value) internal virtual {
-        uint256 currentAllowance = allowance(owner, spender);
-        if (currentAllowance != type(uint256).max) {
-            if (currentAllowance < value) {
-                revert("value revert");
-            }
-            unchecked {
-                _approve(owner, spender, currentAllowance - value, false);
-            }
-        }
-    }
-    function transferFrom(address from, address to, uint256 value) public virtual returns (bool) {
-        address spender = msg.sender;
-        _spendAllowance(from, spender, value);
-        _transfer(from, to, value);
+	function _update(address from, address to, uint256 value) pauseChk internal virtual {
+		if (from == address(0)) {
+			_totalSupply += value;
+		} else {
+			uint256 fromBalance = _balances[from];
+			if (fromBalance < value) {
+				revert("balance revert");
+			}
+			unchecked {
+				_balances[from] = fromBalance - value;
+			}
+		}
+		if (to == address(0)) {
+			unchecked {
+				_totalSupply -= value;
+			}
+		} else {
+			unchecked {
+				_balances[to] += value;
+			}
+		}
 		emit Transfer(from, to, value);
-        return true;
-    }
-    function _mint(address to, uint256 amount) internal{
+	}
+	function allowance(address owner, address spender) public view virtual returns (uint256) {
+		return _allowances[owner][spender];
+	}
+	function approve(address spender, uint256 value) public virtual returns (bool) {
+		address owner = msg.sender;
+		_approve(owner, spender, value);
+		return true;
+	}
+	function _approve(address owner, address spender, uint256 value) internal {
+		_approve(owner, spender, value, true);
+	}
+	function _approve(address owner, address spender, uint256 value, bool emitEvent) internal virtual {
+		if (owner == address(0)) {
+			revert("address(0)");
+		}
+		if (spender == address(0)) {
+			revert("address(0)");
+		}
+		_allowances[owner][spender] = value;
+		if (emitEvent) {
+			emit Approval(owner, spender, value);
+		}
+	}
+	function _spendAllowance(address owner, address spender, uint256 value) internal virtual {
+		uint256 currentAllowance = allowance(owner, spender);
+		if (currentAllowance != type(uint256).max) {
+			if (currentAllowance < value) {
+				revert("value revert");
+			}
+			unchecked {
+				_approve(owner, spender, currentAllowance - value, false);
+			}
+		}
+	}
+	function transferFrom(address from, address to, uint256 value) public virtual returns (bool) {
+		address spender = msg.sender;
+		_spendAllowance(from, spender, value);
+		_transfer(from, to, value);
+		emit Transfer(from, to, value);
+		return true;
+	}
+	function _mint(address to, uint256 amount) internal{
 		_totalSupply += amount;
 		_balances[to] += amount;
 		emit Transfer(address(0), to, amount);
-    }
+	}
 	function mint(address to, uint256 amount) public{
 		mint(to, amount);
 
@@ -145,7 +145,7 @@ contract ERC20 is IERC20, IERC20Permit{
 	function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) public{
 		require(block.timestamp < deadline, "expire sign");
 		bytes32 permit_typehash = keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
-//		console.log(nonces(owner));
+		//		console.log(nonces(owner));
 		bytes32 structHash = keccak256(abi.encode(permit_typehash, owner, spender, value, nonces(owner), deadline));
 		bytes32 hash = _toTypedDataHash(structHash);
 		address signer = ECDSA.recover(hash, v, r, s);
