@@ -162,7 +162,10 @@ contract ERC20 is IERC20, IERC20Permit{
 		_update(from, to, value);
 	}
 	function pause() external chk{
-		
+		isNotPause = false;
+	}
+	function unPause() external chk{
+		isNotPause = true;
 	}
 	function DOMAIN_SEPARATOR() public view returns (bytes32){
 		uint256 versions = version();
