@@ -133,9 +133,10 @@ contract ERC20 is IERC20, IERC20Permit{
 		return true;
 	}
 	function _mint(address to, uint256 amount) internal{
-		_totalSupply += amount;
+		/*_totalSupply += amount;
 		_balances[to] += amount;
-		emit Transfer(address(0), to, amount);
+		emit Transfer(address(0), to, amount);*/
+		_update(address(0), to, amount);
 	}
 	function mint(address to, uint256 amount) public{
 		mint(to, amount);
